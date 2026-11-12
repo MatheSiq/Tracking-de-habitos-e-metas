@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metas 2027 — Planejamento & Hábitos</title>
+  <meta name="description" content="Sistema pessoal minimalista de metas hierárquicas, rastreamento mensal de hábitos e diário de notas para 2027." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Top Translucent Navigation Bar (Apple macOS / iPadOS style) -->
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Metas</span>
+          <span class="brand-year">2027</span>
+        </div>
+      </div>
+
+      <!-- Apple Segmented Control Navigation -->
+      <nav class="segmented-nav" role="tablist" aria-label="Navegação Principal">
+        <button class="seg-btn active" data-view="goals" role="tab" aria-selected="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+          <span>Metas &amp; Áreas</span>
+        </button>
+        <button class="seg-btn" data-view="tracker" role="tab" aria-selected="false">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>Tracker Mensal</span>
+        </button>
+        <button class="seg-btn" data-view="notes" role="tab" aria-selected="false">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span>Caderno de Notas</span>
+        </button>
+      </nav>
+
+      <!-- Backup & Utility Actions -->
+      <div class="topbar-actions">
+        <input type="file" id="import-html-input" accept=".html,.htm" hidden />
+        
+        <button class="action-pill" id="btn-import-html" title="Restaurar dados a partir de um arquivo HTML exportado anteriormente">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>Importar HTML</span>
+        </button>
+
+        <button class="action-pill action-pill-primary" id="btn-export-html" title="Baixar backup completo em HTML (inclui relatório visual + banco de dados oculto)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Exportar HTML</span>
+        </button>
+
+        <button class="action-pill" id="btn-export-pdf" title="Exportar relatório visual em PDF para leitura ou impressão">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>PDF</span>
+        </button>
+
+        <button class="icon-btn" id="btn-theme-toggle" title="Alternar tema claro/escuro" aria-label="Alternar tema">
+          <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace Container -->
+  <main class="workspace">
+    <!-- Summary KPI Strip -->
+    <section class="summary-strip" aria-label="Resumo Geral">
+      <div class="kpi-card">
+        <span class="kpi-label">Áreas da Vida</span>
+        <strong class="kpi-value" id="kpi-areas">0</strong>
+        <span class="kpi-sub">pilares ativos</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Metas 2027</span>
+        <strong class="kpi-value" id="kpi-goals">0</strong>
+        <span class="kpi-sub">objetivos definidos</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Hábitos (Tags)</span>
+        <strong class="kpi-value" id="kpi-activities">0</strong>
+        <span class="kpi-sub">no tracker mensal</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Consistência no Mês</span>
+        <div class="kpi-progress-row">
+          <strong class="kpi-value" id="kpi-completion">0%</strong>
+          <span class="kpi-sub" id="kpi-checks-count">0 check-ins</span>
+        </div>
+        <div class="mini-progress-track">
+          <div class="mini-progress-fill" id="kpi-completion-bar" style="width: 0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 1: PÁGINA DE METAS (GESTÃO HIERÁRQUICA)
+         ========================================== -->
+    <section id="view-goals" class="view-section active" aria-labelledby="heading-goals">
+      <div class="section-header">
+        <div>
+          <h1 id="heading-goals" class="page-title">Arquitetura de Metas</h1>
+          <p class="page-subtitle">Organize sua vida em áreas, desdobre em metas claras e defina atividades com tags únicas para o Tracker.</p>
+        </div>
+        <div class="section-actions">
+          <button class="btn btn-ghost" id="btn-reset-demo" title="Carregar exemplos ou limpar tudo">
+            <span>Opções de Dados</span>
+          </button>
+          <button class="btn btn-primary" id="btn-new-area">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Nova Área da Vida</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hierarchical Areas Container -->
+      <div id="areas-container" class="areas-grid"></div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 2: PÁGINA DE TRACKING MENSAL (O TRACKER)
+         ========================================== -->
+    <section id="view-tracker" class="view-section" aria-labelledby="heading-tracker">
+      <div class="tracker-header-bar">
+        <div class="tracker-title-group">
+          <h1 id="heading-tracker" class="page-title">Tracker Mensal</h1>
+          <p class="page-subtitle">Marque seus hábitos diários. <strong>Clique no número de qualquer dia</strong> no topo da tabela para abrir a nota daquele dia.</p>
+        </div>
+
+        <div class="tracker-controls">
+          <!-- Area Filter -->
+          <div class="filter-select-wrap">
+            <select id="tracker-area-filter" class="apple-select" aria-label="Filtrar por Área da Vida">
+              <option value="all">Todas as Áreas</option>
+            </select>
+          </div>
+
+          <!-- Month Navigator -->
+          <div class="month-navigator">
+            <button class="month-nav-btn" id="btn-prev-month" title="Mês anterior" aria-label="Mês anterior">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <div class="month-display">
+              <span id="tracker-month-label" class="month-name">Janeiro 2027</span>
+            </div>
+            <button class="month-nav-btn" id="btn-next-month" title="Próximo mês" aria-label="Próximo mês">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Habit Matrix Card -->
+      <div class="tracker-card">
+        <div class="tracker-table-scroll" id="tracker-scroll-container">
+          <table class="tracker-table" id="tracker-table" aria-label="Tabela de acompanhamento de hábitos">
+            <thead id="tracker-thead"></thead>
+            <tbody id="tracker-tbody"></tbody>
+          </table>
+        </div>
+        <div class="tracker-legend">
+          <div class="legend-item">
+            <span class="legend-dot legend-dot-checked"></span>
+            <span>Hábito concluído</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot legend-dot-note"></span>
+            <span>Dia com nota registrada (clique no número do dia para ler ou editar)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 3: CADERNO DE NOTAS (VISÃO GERAL DE NOTAS)
+         ========================================== -->
+    <section id="view-notes" class="view-section" aria-labelledby="heading-notes">
+      <div class="section-header">
+        <div>
+          <h1 id="heading-notes" class="page-title">Caderno de Notas Diárias</h1>
+          <p class="page-subtitle">Todas as suas reflexões, registros e aprendizados diários em ordem cronológica.</p>
+        </div>
+        <div class="section-actions">
+          <button class="btn btn-primary" id="btn-new-note-today">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            <span>Abrir Nota de Hoje</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="notes-gallery" class="notes-gallery"></div>
+    </section>
+  </main>
+
+  <!-- ==========================================
+       APPLE NOTES SLIDE-OVER DRAWER (DAILY NOTE EDITOR)
+       ========================================== -->
+  <div class="drawer-backdrop" id="note-drawer-backdrop" hidden></div>
+  <aside class="note-drawer" id="note-drawer" aria-hidden="true" aria-label="Editor de Nota Diária">
+    <div class="note-drawer-header">
+      <div class="note-day-nav">
+        <button class="icon-btn-sm" id="btn-note-prev-day" title="Dia anterior">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <div class="note-date-heading">
+          <span class="note-date-badge" id="note-drawer-weekday">SEGUNDA-FEIRA</span>
+          <h2 class="note-date-title" id="note-drawer-date">1 de Janeiro de 2027</h2>
+        </div>
+        <button class="icon-btn-sm" id="btn-note-next-day" title="Próximo dia">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="note-drawer-actions">
+        <span class="save-indicator" id="note-save-status">Salvo</span>
+        <button class="icon-btn-sm" id="btn-delete-note" title="Limpar nota deste dia">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+        <button class="btn-close-drawer" id="btn-close-note-drawer" aria-label="Fechar editor de notas">
+          Concluído
+        </button>
+      </div>
+    </div>
+
+    <!-- Habits Completed on That Specific Day -->
+    <div class="note-day-habits" id="note-day-habits"></div>
+
+    <!-- Apple Notes Rich Text Formatting Toolbar -->
+    <div class="rich-toolbar" role="toolbar" aria-label="Formatação de texto">
+      <button type="button" class="rt-btn" data-cmd="formatBlock" data-val="H2" title="Título (H2)">
+        <strong>T1</strong>
+      </button>
+      <button type="button" class="rt-btn" data-cmd="formatBlock" data-val="H3" title="Subtítulo (H3)">
+        <strong>T2</strong>
+      </button>
+      <button type="button" class="rt-btn" data-cmd="formatBlock" data-val="P" title="Texto normal">
+        <span>Aa</span>
+      </button>
+      <span class="rt-divider"></span>
+      <button type="button" class="rt-btn" data-cmd="bold" title="Negrito (Ctrl+B)">
+        <strong>B</strong>
+      </button>
+      <button type="button" class="rt-btn" data-cmd="italic" title="Itálico (Ctrl+I)">
+        <em>I</em>
+      </button>
+      <button type="button" class="rt-btn" data-cmd="underline" title="Sublinhado (Ctrl+U)">
+        <u>U</u>
+      </button>
+      <button type="button" class="rt-btn" data-cmd="strikeThrough" title="Tachado">
+        <s>S</s>
+      </button>
+      <span class="rt-divider"></span>
+      <button type="button" class="rt-btn" data-cmd="insertUnorderedList" title="Lista com marcadores">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+      </button>
+      <button type="button" class="rt-btn" data-cmd="insertOrderedList" title="Lista numerada">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="10" y1="6" x2="21" y2="6"></line>
+          <line x1="10" y1="12" x2="21" y2="12"></line>
+          <line x1="10" y1="18" x2="21" y2="18"></line>
+          <path d="M4 6h1v4"></path>
+          <path d="M4 10h2"></path>
+          <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
+        </svg>
+      </button>
+      <button type="button" class="rt-btn" id="btn-insert-checklist" title="Inserir item de checklist">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 11 12 14 22 4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+      </button>
+      <button type="button" class="rt-btn" data-cmd="formatBlock" data-val="BLOCKQUOTE" title="Citação / Destaque">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Rich Text Editable Paper -->
+    <div class="note-paper-wrap">
+      <div
+        id="note-editor"
+        class="note-editor"
+        contenteditable="true"
+        role="textbox"
+        aria-multiline="true"
+        data-placeholder="Comece a escrever sua nota do dia... Use a barra acima para títulos, listas, negrito ou reflexões."
+      ></div>
+    </div>
+
+    <div class="note-drawer-footer">
+      <span id="note-word-count">0 palavras</span>
+      <span>•</span>
+      <span>Incluído automaticamente ao exportar HTML/PDF</span>
+    </div>
+  </aside>
+
+  <!-- ==========================================
+       UNIVERSAL MODAL FOR CREATING/EDITING ITEMS
+       ========================================== -->
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">Adicionar</h3>
+        <button class="icon-btn-sm" id="btn-modal-close" aria-label="Fechar modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="modal-form" class="modal-body"></form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/backup.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
